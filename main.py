@@ -14,9 +14,50 @@ class ScrButton(Button):
       self.direction = direction
       self.goal = goal
   def on_press(self):
-       
       self.screen.manager.transition.direction = self.direction
       self.screen.manager.current = self.goal
+
+class SecondScr(Screen):
+  def __init__(self, **kwargs):
+      super().__init__(**kwargs)
+      vl = BoxLayout(orientation='vertical')
+      self.txt = Label(text= 'nazar')
+      vl.add_widget(self.txt)
+
+      hl_0 = BoxLayout(size_hint=(0.8, None), height='30sp')
+      lbl1 = Label(text='Введіть пароль:', halign='right')
+      self.input = TextInput(multiline=False)
+
+      hl_0.add_widget(lbl1)
+      hl_0.add_widget(self.input)
+      vl.add_widget(hl_0)
+
+      hl = BoxLayout(size_hint=(0.5, 0.2), pos_hint={'center_x': 0.5})
+      btn_false = Button(text="OK!")
+      btn_back = ScrButton(self, direction='right', goal='main', text="Назад")
+
+
+      hl.add_widget(btn_false)
+      hl.add_widget(btn_back)
+      vl.add_widget(hl)
+      self.add_widget(vl)
+
+      btn_false.on_press = self.change_text
+
+  def change_text(self):
+      self.txt.text = self.input.text + ' !!!!!!!!!!!!!'
+
+class FirstScr(Screen):
+  def __init__(self, **kwargs):
+      super().__init__(**kwargs)
+      vl = BoxLayout(orientation='vertical', size_hint=(0.5, 0.5),
+                      pos_hint={'center_x': 0.5, 'center_y': 0.5})
+      btn = Button(text= 'Вибір: 1', size_hint=(.5, 1))
+      btn_back = ScrButton(self, direction='up', goal='main',
+                            text="Назад", size_hint=(.5, 1), pos_hint={'right': 1})
+      vl.add_widget(btn)	
+      vl.add_widget(btn_back)
+      self.add_widget(vl)
 
 class MainScr(Screen):
   def __init__(self, **kwargs):
@@ -48,8 +89,8 @@ class MyApp(App):
   def build(self):
       sm = ScreenManager()
       sm.add_widget(MainScr(name='main'))
-    #   sm.add_widget(FirstScr(name='first'))
-    #   sm.add_widget(SecondScr(name='second'))
+      sm.add_widget(FirstScr(name='first'))
+      sm.add_widget(SecondScr(name='second'))
     #   sm.add_widget(ThirdScr(name='third'))
     #   sm.add_widget(FourthScr(name='fourth'))
       return sm
